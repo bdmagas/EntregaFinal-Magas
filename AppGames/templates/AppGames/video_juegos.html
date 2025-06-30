@@ -1,0 +1,122 @@
+{% extends "AppGames/base.html" %}
+{% load static %}
+
+{% block title %}
+Games | Good Game
+{% endblock %}
+
+{% block head_extra %}
+	<meta name="robots" content="noindex, nofollow">
+	<meta name="description" content="¡Bienvenido a la mejor comunidad gamer!">
+{% endblock %}
+
+{% block content %}
+<!-- Tu contenido aquí -->
+
+	<!-- Page top section -->
+    <section class="page-top-section set-bg" data-setbg="{% static 'AppGames/img/page-top-bg/1.jpg' %}">
+		<div class="page-info">
+			<h2>Games</h2>
+			<div class="site-breadcrumb">
+				<a href="{% url 'home' %}">Home</a>  /
+				<span>Games</span>
+			</div>
+		</div>
+	</section>
+	<!-- Page top end-->
+
+	<!-- Games section -->
+	<section class="games-section">
+		<div class="container">
+            <ul class="game-filter">
+                {% for letra in letras %}
+                    <li>
+                        <a href="?letra={{ letra }}" {% if letra == letra_seleccionada %}class="active"{% endif %}>{{ letra }}</a>
+                    </li>
+                {% endfor %}
+                <ul class="text-box">
+                    <a href="{% url 'games' %}" class="read-more">All <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></a>
+                </ul>
+            </ul>
+
+			<div class="row">
+                <div class="col-lg-9">
+                    <div class="row">                
+                        {% for juego in page_obj %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                {% if juego.imagen %}
+                                    <img src="{{ juego.imagen.url }}" class="card-img-top" alt="{{ juego.nombre }}">
+                                {% else %}
+                                    <img src="{% static 'AppGames/img/default.jpg' %}" class="card-img-top" alt="Sin imagen">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ juego.nombre }}</h5>
+                                    <p class="card-text">
+                                        Género: {{ juego.genero }}<br>
+                                        Plataformas: {{ juego.plataformas.all|join:", " }}<br>
+                                        Lanzamiento: {{ juego.lanzamiento }}<br>
+                                        Tag: {{ juego.tag }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div id="stickySidebar" style="position: sticky; top: 80px;">
+                        <div class="widget-item">
+                            <div class="categories-widget">
+                                <h4 class="widget-title">Categories</h4>
+                                <ul>
+                                    {% for tag in tags %}
+                                    <li>
+                                        <a href="?{% if letra_seleccionada %}letra={{ letra_seleccionada }}&{% endif %}{% if genero_seleccionado %}genero={{ genero_seleccionado }}&{% endif %}tag={{ tag }}">
+                                            {{ tag }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="widget-item">
+                            <div class="categories-widget">
+                                <h4 class="widget-title">Genre</h4>
+                                <ul>
+                                    {% for gen in generos %}
+                                    <li>
+                                        <a href="?{% if letra_seleccionada %}letra={{ letra_seleccionada }}&{% endif %}{% if tag_seleccionado %}tag={{ tag_seleccionado }}&{% endif %}genero={{ gen }}">
+                                            {{ gen }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>  
+                    </div>
+                </div>
+            </div>
+             <!-- Pagination -->
+            <div class="site-pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}{% if letra %}&letra={{ letra }}{% endif %}">&laquo;</a>
+                {% endif %}
+            
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <a href="?page={{ num }}{% if letra %}&letra={{ letra }}{% endif %}" class="active">{{ num }}.</a>
+                    {% else %}
+                        <a href="?page={{ num }}{% if letra %}&letra={{ letra }}{% endif %}">{{ num }}.</a>
+                    {% endif %}
+                {% endfor %}
+            
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if letra %}&letra={{ letra }}{% endif %}">&raquo;</a>
+                {% endif %}
+            </div>
+            <!-- End Pagination -->
+		</div>
+	</section>
+	<!-- Games end-->
+{% endblock %}

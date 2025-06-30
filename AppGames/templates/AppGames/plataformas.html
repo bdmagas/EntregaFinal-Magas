@@ -1,0 +1,84 @@
+{% extends "AppGames/base.html" %}
+{% load static %}
+
+{% block title %}
+Plataformas | Good Game
+{% endblock %}
+
+{% block content %}
+
+<!-- Page top section -->
+<section class="page-top-section set-bg" data-setbg="{% static 'AppGames/img/page-top-bg/4.jpg' %}">
+  <div class="page-info">
+    <h2>Platforms</h2>
+    <div class="site-breadcrumb">
+      <a href="{% url 'home' %}">Home</a>  /
+      <span>Platforms</span>
+    </div>
+  </div>
+</section>
+<!-- Page top end-->
+
+<section class="games-section">
+  <div class="container">
+
+    <!-- Filtro plataformas -->
+    <ul class="blog-filter">
+      <li><a href="{% url 'platforms' %}" class="active">Todas</a></li>
+      {% for plataforma in plataformas %}
+      <li>
+        <a href="?plataforma_id={{ plataforma.id }}" {% if plataforma.id == plataforma_seleccionada %}class="active"{% endif %}>
+          {{ plataforma.nombre }}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <div class="row">
+      {% if page_obj %}
+        {% for juego in page_obj %}
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            {% if juego.imagen %}
+            <img src="{{ juego.imagen.url }}" class="card-img-top" alt="{{ juego.nombre }}">
+            {% else %}
+            <img src="{% static 'AppGames/img/default.jpg' %}" class="card-img-top" alt="Sin imagen">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ juego.nombre }}</h5>
+              <p class="card-text">
+                Género: {{ juego.genero }}<br>
+                Plataformas: {{ juego.plataformas.all|join:", " }}<br>
+                Lanzamiento: {{ juego.lanzamiento }}<br>
+                Tag: {{ juego.tag }}
+              </p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p>No hay juegos para esta plataforma.</p>
+      {% endif %}
+    </div>
+
+    <!-- Pagination -->
+    <div class="site-pagination">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}{% if plataforma_seleccionada %}&plataforma_id={{ plataforma_seleccionada }}{% endif %}">&laquo;</a>
+      {% endif %}
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <a href="?page={{ num }}{% if plataforma_seleccionada %}&plataforma_id={{ plataforma_seleccionada }}{% endif %}" class="active">{{ num }}.</a>
+        {% else %}
+          <a href="?page={{ num }}{% if plataforma_seleccionada %}&plataforma_id={{ plataforma_seleccionada }}{% endif %}">{{ num }}.</a>
+        {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if plataforma_seleccionada %}&plataforma_id={{ plataforma_seleccionada }}{% endif %}">&raquo;</a>
+      {% endif %}
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

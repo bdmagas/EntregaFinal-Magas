@@ -1,0 +1,119 @@
+{% extends "AppGames/base.html" %}
+{% load static %}
+
+{% block title %}
+Home | Good Game
+{% endblock %}
+
+{% block head_extra %}
+<meta property="og:title" content="Good Game - Comunidad Gamer">
+<meta property="og:description" content="Juegos y más">
+<meta property="og:image" content="{% static 'AppGames/img/featured-image.jpg' %}">
+<meta property="og:type" content="website">
+{% endblock %}
+
+{% block content %}
+
+	<!-- Header section -->
+	<header class="header-section">
+		<div class="header-warp">
+			<div class="header-social d-flex justify-content-end">
+				<p>Follow us:</p>
+				<a href="#"><i class="fa fa-pinterest"></i></a>
+				<a href="#"><i class="fa fa-facebook"></i></a>
+				<a href="#"><i class="fa fa-twitter"></i></a>
+			</div>
+			<div class="header-bar-warp d-flex">
+
+				<nav class="top-nav-area w-100">
+                    <!-- Login/Logout -->
+                    <div class="user-panel">
+                        {% if user.is_authenticated %}
+                          <span class="me-2">Bienvenido, {{ user.username }} | </span>
+                          <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link p-0 m-0 align-baseline text-white">Logout</button>
+                        </form>
+                        {% else %}
+                          <a href="{% url 'login' %}">Login</a> / <a href="{% url 'register' %}">Register</a>
+                        {% endif %}
+                    </div>
+                    <!-- Login/Logout end -->
+
+                    <!-- Menu -->
+					<ul class="main-menu primary-menu">
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% if user.is_authenticated %}{% url 'games' %}{% endif %}">Games</a>
+                            {% if user.is_staff %}
+                            <ul class="sub-menu">
+                                <li><a href="{% url 'addGame' %}">Agregar juego</a></li>				
+                            </ul>       
+                            {% endif %}
+                        </li>                     
+                        <li><a href="{% if user.is_authenticated %}{% url 'reviews' %}{% endif %}">Reviews</a>
+                            {% if user.is_authenticated %}
+                            <ul class="sub-menu">
+                                <li><a href="{% url 'addNew' %}">Agregar review</a></li>				
+                            </ul>  
+                            {% endif %}                     
+                        </li>
+                        <li><a href="{% if user.is_authenticated %}{% url 'platforms' %}{% endif %}">Plataformas</a>
+                            {% if user.is_staff %}
+                            <ul class="sub-menu">
+                                <li><a href="{% url 'addPlatform' %}">Agregar plataforma</a></li>			
+                            </ul>
+                            {% endif %}	                       
+                        </li>                           
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</header>
+	<!-- Header section end -->
+
+	<!-- Hero section -->
+	<section class="hero-section overflow-hidden">
+		<div class="hero-slider owl-carousel">
+			<div class="hero-item set-bg d-flex align-items-center justify-content-center text-center" data-setbg="{% static 'AppGames/img/slider-bg-1.jpg' %}">
+				<div class="container">
+					<h2>Good Game</h2>
+					<p>¡Bienvenido a GG la mejor comunidad gamer!</p>
+				</div>
+			</div>
+			<div class="hero-item set-bg d-flex align-items-center justify-content-center text-center" data-setbg="{% static 'AppGames/img/slider-bg-2.jpg' %}">
+				<div class="container">
+					<h2>Good Game</h2>
+					<p>¡Bienvenido a GG la mejor comunidad gamer!</p>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Hero section end-->
+
+	<!-- Intro section -->
+	<section class="intro-video-section set-bg d-flex align-items-end " data-setbg="{% static 'AppGames/img/resident-evil-requiem-xbox.jpg' %}">
+		<a href="https://www.youtube.com/watch?v=n-MlCPVaSLg" class="video-play-btn video-popup" target="_blank" rel="noopener noreferrer"><img src="{% static 'AppGames/img/icons/solid-right-arrow.png' %}" alt="Play video"></a>
+		<div class="container">
+			<div class="video-text">
+				<h2>Resident Evil Requiem - Reveal Trailer | Summer Game Fest 2025</h2>
+				<p>Capcom has officially revealed Resident Evil 9... and it's called Resident Evil Requiem. Check out your first terrifying look at the next entry in the beloved horror franchise that is set to be released on February 27, 2026.</p>
+			</div>
+		</div>
+	</section>
+	<!-- Intro section end -->
+
+
+	<!-- Featured section -->
+	<section class="featured-section">
+		<div class="featured-bg set-bg" data-setbg="{% static 'AppGames/img/Grand-Theft-Auto-6-may-have-GTA-5-character-cameo.jpg' %}"></div>
+		<div class="featured-box">
+			<div class="text-box">
+				<div class="top-meta">26.05.2026</div>
+				<h3>COMING MAY 26, 2026!</h3>
+				<p>The game you've been waiting for...</p>
+				<a href="https://www.rockstargames.com/VI" target="_blank" class="read-more">Read More  <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></a>
+			</div>
+		</div>
+	</section>
+	<!-- Featured section end-->
+{% endblock %}

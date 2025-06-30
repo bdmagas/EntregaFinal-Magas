@@ -1,0 +1,98 @@
+{% extends 'AppGames/base.html' %}
+{% load static %}
+
+{% block title %}Nueva Review{% endblock %}
+
+{% block head_extra %}
+<style>
+    .star-rating {
+        direction: rtl;
+        font-size: 2rem;
+        unicode-bidi: bidi-override;
+        display: flex;
+        justify-content: start;
+        gap: 5px;
+    }
+
+    .star-rating input {
+        display: none;
+    }
+
+    .star-rating label {
+        color: #555;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+    .star-rating input:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: #f5b301;
+    }
+
+    form label:not(.star-rating label) {
+        color: #444;
+        font-weight: 500; 
+    }   
+</style>
+{% endblock %}
+
+{% block content %}
+
+	<!-- Page top section -->
+	<section class="page-top-section set-bg" data-setbg="{% static 'AppGames/img/page-top-bg/2.jpg' %}">
+		<div class="page-info">
+			<h2>Reviews</h2>
+			<div class="site-breadcrumb">
+				<a href="{% url 'home' %}">Home</a>  /
+				<a href="{% url 'reviews' %}">Reviews</a>  /
+				<span>Add review</span>
+			</div>
+		</div>
+	</section>
+	<!-- Page top end-->
+
+<div class="container mt-5 text-white">
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- Juego -->
+        <div class="form-group">
+            {{ form.juego.label_tag|safe }}
+            {{ form.juego }}
+            {{ form.juego.errors }}
+        </div>
+
+        <!-- Estrellas -->
+        <div class="form-group mt-3">
+            {{ form.estrellas.label_tag|safe }}
+            <div class="star-rating">
+                {% for i in "54321" %}
+                    <input type="radio" id="star{{ i }}" name="estrellas" value="{{ i }}"
+                           {% if form.estrellas.value == i %}checked{% endif %}>
+                    <label for="star{{ i }}" title="{{ i }} estrellas">&#9733;</label>
+                {% endfor %}
+            </div>
+            {{ form.estrellas.errors }}
+        </div>
+        
+        <!-- user_name -->
+        <div class="form-group mt-3">
+            {{ form.user_name.label_tag|safe }}
+            {{ form.user_name }}
+            {{ form.user_name.errors }}
+        </div>
+
+        <!-- Comentario -->
+        <div class="form-group mt-3">
+            {{ form.comentarios.label_tag|safe }}
+            {{ form.comentarios }}
+            {{ form.comentarios.errors }}
+        </div>
+
+        <!-- <button type="submit" class="btn btn-primary mt-3">Enviar</button> -->
+        <button class="site-btn">Enviar<img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></button>
+
+    </form>
+</div>
+{% endblock %}

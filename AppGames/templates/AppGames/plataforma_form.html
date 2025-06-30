@@ -1,0 +1,64 @@
+{% extends 'AppGames/base.html' %}
+{% load static %}
+
+{% block title %}Nueva Plataforma{% endblock %}
+
+{% block head_extra %}
+<style>
+    .form-group label {
+        color: #444; 
+        font-weight: 500; 
+    }
+
+    .form-control {
+        background-color: #222;
+        color: #fff;
+        border: 1px solid #444;
+    }
+
+    .form-control:focus {
+        background-color: #222;
+        color: #fff;
+        border-color: #666;
+        box-shadow: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+	<!-- Page top section -->
+	<section class="page-top-section set-bg" data-setbg="{% static 'AppGames/img/page-top-bg/2.jpg' %}">
+		<div class="page-info">
+			<h2>Games</h2>
+			<div class="site-breadcrumb">
+				<a href="{% url 'home' %}">Home</a>  /
+				<a href="{% url 'platforms' %}">Platformas</a>  /
+				<span>Add platform</span>
+			</div>
+		</div>
+	</section>
+	<!-- Page top end-->
+
+    <div class="container mt-5 text-white">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+    
+            <!-- Nombre -->
+            <div class="form-group">
+                {{ form.nombre.label_tag }}
+                {{ form.nombre }}
+                {{ form.nombre.errors }}
+            </div>
+    
+            <!-- descripcion -->
+            <div class="form-group mt-3">
+                {{ form.descripcion.label_tag }}
+                {{ form.descripcion }}
+                {{ form.descripcion.errors }}
+            </div>
+    
+            <button class="site-btn mt-4">Guardar <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></button>
+        </form>
+    </div>
+{% endblock %}

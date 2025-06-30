@@ -1,0 +1,98 @@
+{% extends 'AppGames/base.html' %}
+{% load static %}
+
+{% block title %}Registro{% endblock %}
+
+{% block head_extra %}
+<style>
+    .form-group label {
+        color: #444;
+        font-weight: 500; 
+    }
+
+    .form-control {
+        background-color: #222;
+        color: #fff;
+        border: 1px solid #444;
+    }
+
+    .form-control:focus {
+        background-color: #222;
+        color: #fff;
+        border-color: #666;
+        box-shadow: none;
+    }
+
+    .errorlist {
+        color: red;
+        font-weight: bold;
+        list-style: none;
+        padding-left: 0;
+        margin-top: 0.5rem;
+    }    
+</style>
+{% endblock %}
+
+{% block content %}
+
+	<!-- Page top section -->
+	<section class="page-top-section set-bg" data-setbg="{% static 'AppGames/img/page-top-bg/2.jpg' %}">
+		<div class="page-info">
+			<h2>Register</h2>
+			<div class="site-breadcrumb">
+				<a href="{% url 'home' %}">Home</a> /
+				<span>Register</span>
+			</div>
+		</div>
+	</section>
+	<!-- Page top end -->
+
+    <div class="container mt-5 text-white">
+        <h2>Crear una cuenta</h2>
+        <form method="post">
+            {% csrf_token %}
+            
+            <!-- Mostramos errores generales del formulario -->
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+    
+            <!-- Campo username -->
+            <div class="form-group">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+                {{ form.username.errors }}
+            </div>
+    
+            <!-- Campo password1 -->
+            <div class="form-group">
+                {{ form.password1.label_tag }}
+                {{ form.password1 }}
+                {{ form.password1.errors }}
+            </div>
+    
+            <!-- Campo password2 -->
+            <div class="form-group">
+                {{ form.password2.label_tag }}
+                {{ form.password2 }}
+                {{ form.password2.errors }}
+            </div>
+
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div><strong>{{ field.label }}:</strong> {{ error }}</div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <button class="site-btn mt-3">Registrar <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></button>
+        </form>
+    </div>
+
+{% endblock %}
