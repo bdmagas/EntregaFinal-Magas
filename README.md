@@ -76,6 +76,8 @@ pip install -r requirements.txt
 ```
 
 4. **Aplicá migraciones**
+⚠️ **Importante:** Si ya tenés el archivo db.sqlite3, podés omitir el paso de migraciones.
+
 ```bash
 python manage.py makemigrations
 python manage.py migrate
@@ -87,6 +89,9 @@ python manage.py createsuperuser
 ```
 
 6. **Cargar datos de ejemplo**
+⚠️ **Opcional:** Este paso es necesario **solo si estás generando la base de datos desde cero**  
+Si ya clonaste el proyecto con el archivo db.sqlite3, podés saltearlo.
+
 ```bash
 python manage.py loaddata AppGames/fixtures/datos_iniciales.json
 ```
