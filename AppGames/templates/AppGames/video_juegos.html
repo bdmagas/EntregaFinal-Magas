@@ -1,4 +1,4 @@
-{% extends "AppGames/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block title %}
@@ -8,6 +8,26 @@ Games | Good Game
 {% block head_extra %}
 	<meta name="robots" content="noindex, nofollow">
 	<meta name="description" content="¡Bienvenido a la mejor comunidad gamer!">
+
+    <style>
+    .scroll-box {
+        max-height: 400px; /* altura máxima visible */
+        overflow-y: auto;
+        padding-right: 10px; /* espacio para scroll */
+        scrollbar-width: none;  /* Firefox */
+        -ms-overflow-style: none;  /* IE/Edge */        
+    }
+    .scroll-box::-webkit-scrollbar {
+        width: 6px;
+        /* display: none; */
+    }
+
+    .scroll-box::-webkit-scrollbar-thumb {
+        background-color: #999;
+        border-radius: 10px;
+    }
+    </style>
+
 {% endblock %}
 
 {% block content %}
@@ -34,7 +54,7 @@ Games | Good Game
                         <a href="?letra={{ letra }}" {% if letra == letra_seleccionada %}class="active"{% endif %}>{{ letra }}</a>
                     </li>
                 {% endfor %}
-                <ul class="text-box">
+                <ul class="text-box mt-4">
                     <a href="{% url 'games' %}" class="read-more">All <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></a>
                 </ul>
             </ul>
@@ -66,8 +86,16 @@ Games | Good Game
                 </div>
                 <div class="col-lg-3">
                     <div id="stickySidebar" style="position: sticky; top: 80px;">
+                        <!-- Buscar -->
+						<div class="widget-item">
+							<form class="search-widget" method="get">
+                                <input type="text" name="q"  value="{{ query|default:'' }}">
+								<button>search</button>
+							</form>
+						</div>   
+                         <!--End Buscar -->                     
                         <div class="widget-item">
-                            <div class="categories-widget">
+                            <div class="categories-widget scroll-box">
                                 <h4 class="widget-title">Categories</h4>
                                 <ul>
                                     {% for tag in tags %}
@@ -81,7 +109,7 @@ Games | Good Game
                             </div>
                         </div>
                         <div class="widget-item">
-                            <div class="categories-widget">
+                            <div class="categories-widget scroll-box">
                                 <h4 class="widget-title">Genre</h4>
                                 <ul>
                                     {% for gen in generos %}
@@ -93,7 +121,7 @@ Games | Good Game
                                     {% endfor %}
                                 </ul>
                             </div>
-                        </div>  
+                        </div>   
                     </div>
                 </div>
             </div>

@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Plataformas{% endblock %}
+
+{% block head_extra %}
+<style>
+    .platform-table th,
+    .platform-table td {
+        vertical-align: middle;
+    }
+
+    .card-body {
+        background-color: transparent;
+        border: 1px solid transparent;
+        padding: 2rem;
+        border-radius: 8px;
+    }
+
+    .widget-title {
+        color: #ffffff;
+        font-weight: bold;
+    }
+
+    .alert-warning {
+        background-color: transparent;
+        color: #fff;
+        border: none;
+    }
+
+	/* Botón pequeño */
+	.site-btn-sm {
+		font-size: 12px !important;
+		padding: 10px 16px !important;
+		min-width: auto !important;
+	}
+
+	/* Botón VER - info */
+	.site-btn-info {
+		color: #034051 !important;
+	}
+	.site-btn-info:after {
+		background: #17a2b8 !important;
+		box-shadow: 0 0 9px 3px rgba(23, 162, 184, 0.24) !important;
+	}
+	.site-btn-info:before {
+		background: #fff !important;
+	}
+
+	/* Botón EDITAR - warning */
+	.site-btn-warning {
+		color: #775104 !important;
+	}
+	.site-btn-warning:after {
+		background: #ffc107 !important;
+		box-shadow: 0 0 9px 3px rgba(255, 193, 7, 0.24) !important;
+	}
+	.site-btn-warning:before {
+		background: #fff !important;
+	}
+
+	/* Botón BORRAR - danger */
+	.site-btn-danger {
+		color: #740404 !important;
+	}
+	.site-btn-danger:after {
+		background: #dc3545 !important;
+		box-shadow: 0 0 9px 3px rgba(220, 53, 69, 0.24) !important;
+	}
+	.site-btn-danger:before {
+		background: #fff !important;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Page top section -->
+<section class="page-top-section set-bg" data-setbg="{% static 'AppGames/img/page-top-bg/4.jpg' %}">
+    <div class="page-info">
+        <h2>Plataformas</h2>
+        <div class="site-breadcrumb">
+            <a href="{% url 'home' %}">Home</a> /
+            <a href="{% url 'platforms' %}">Plataformas</a> /
+            <span>Listado</span>
+        </div>
+    </div>
+</section>
+<!-- Page top end -->
+
+<section class="blog-section">
+    <div class="container">
+
+        <div class="sidebar game-page-sideber">
+            <div class="card-body">
+                <h4 class="widget-title mb-4 text-center">Listado de Plataformas</h4>
+
+                {% if object_list %}
+                    <div class="table-responsive">
+                        <table class="table table-hover text-center platform-table">
+                            <thead class="text-white">
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for plataforma in object_list %}
+                                    <tr class="text-white">
+                                        <td>{{ plataforma.nombre }}</td>
+                                        <td>{{ plataforma.descripcion }}</td>
+                                        <td>
+                                            <!-- <a href="{% url 'detailPlatform' plataforma.id %}" class="site-btn site-btn-sm site-btn-info">Ver</a> -->
+                                            <a href="{% url 'editPlatform' plataforma.id %}" class="site-btn site-btn-sm site-btn-warning">Editar</a>
+                                            <a href="{% url 'deletePlatform' plataforma.id %}"  class="site-btn site-btn-sm site-btn-danger">Borrar</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+							<tfoot>
+								<tr>
+									<td colspan="2"></td> 
+									<td class="text-end">
+										<a href="{% url 'addPlatform' %}" class="site-btn">
+											Crear <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#" />
+										</a>
+									</td>
+								</tr>
+							</tfoot>							
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning text-center mt-3">
+                        No se encontraron plataformas.
+                    </div>
+                {% endif %}
+
+				<!-- Pagination -->
+				<div class="site-pagination justify-content-center">
+				{% if page_obj.has_previous %}
+					<a href="?page={{ page_obj.previous_page_number }}{% if plataforma_seleccionada %}&plataforma_id={{ plataforma_seleccionada }}{% endif %}">&laquo;</a>
+				{% endif %}
+				{% for num in page_obj.paginator.page_range %}
+					{% if page_obj.number == num %}
+					<a href="?page={{ num }}{% if plataforma_seleccionada %}&plataforma_id={{ plataforma_seleccionada }}{% endif %}" class="active">{{ num }}.</a>
+					{% else %}
+					<a href="?page={{ num }}{% if plataforma_seleccionada %}&plataforma_id={{ plataforma_seleccionada }}{% endif %}">{{ num }}.</a>
+					{% endif %}
+				{% endfor %}
+				{% if page_obj.has_next %}
+					<a href="?page={{ page_obj.next_page_number }}{% if plataforma_seleccionada %}&plataforma_id={{ plataforma_seleccionada }}{% endif %}">&raquo;</a>
+				{% endif %}
+				</div>				
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

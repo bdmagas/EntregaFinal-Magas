@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Iniciar sesión{% endblock %}
+
+{% block head_extra %}
+<style>
+    .form-group label {
+        color: #444;
+        font-weight: 500; 
+    }
+
+    .form-control {
+        background-color: #222;
+        color: #fff;
+        border: 1px solid #444;
+    }
+
+    .form-control:focus {
+        background-color: #222;
+        color: #fff;
+        border-color: #666;
+        box-shadow: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+    <!-- Page top section -->
+    <section class="page-top-section set-bg" data-setbg="{% static 'AppGames/img/page-top-bg/2.jpg' %}">
+        <div class="page-info">
+            <h2>Login</h2>
+            <div class="site-breadcrumb">
+                <a href="{% url 'home' %}">Home</a> /
+                <span>Login</span>
+            </div>
+        </div>
+    </section>
+    <!-- Page top end -->
+
+    <div class="container mt-5 text-white">
+        <form method="post">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <div class="alert alert-danger">Usuario o contraseña incorrectos</div>
+            {% endif %}
+
+            <div class="form-group">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+                {{ form.username.errors }}
+            </div>
+
+            <div class="form-group mt-3">
+                {{ form.password.label_tag }}
+                {{ form.password }}
+                {{ form.password.errors }}
+            </div>
+
+            <button class="site-btn mt-4">Iniciar sesión <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></button>
+        </form>
+    </div>
+
+{% endblock %}

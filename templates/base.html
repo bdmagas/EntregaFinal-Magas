@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	{% load static %}
+	<title>{% block title %}Good Game{% endblock %}</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Good Game - Gaming Magazine">
+	<meta name="keywords" content="GG, Gaming, magazine, html">
+
+	{% block head_extra %}{% endblock %}
+
+	<!-- Favicon -->
+	<link href="{% static 'AppGames/img/logo_new_icon.ico' %}" rel="shortcut icon"/>
+
+	<!-- Google Font -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+
+
+	<!-- Stylesheets -->
+	<link rel="stylesheet" href="{% static 'AppGames/css/bootstrap.min.css' %}"/>
+	<link rel="stylesheet" href="{% static 'AppGames/css/font-awesome.min.css' %}"/>
+	<link rel="stylesheet" href="{% static 'AppGames/css/slicknav.min.css' %}"/>
+	<link rel="stylesheet" href="{% static 'AppGames/css/owl.carousel.min.css' %}"/>
+	<link rel="stylesheet" href="{% static 'AppGames/css/magnific-popup.css' %}"/>
+	<link rel="stylesheet" href="{% static 'AppGames/css/animate.css' %}"/>
+
+	<!-- Main Stylesheets -->
+	<link rel="stylesheet" href="{% static 'AppGames/css/style.css' %}"/>
+
+</head>
+<body>
+	<!-- Page Preloder -->
+	<div id="preloder">
+		<div class="loader"></div>
+	</div>
+
+	<!-- Header section -->
+	<header class="header-section">
+		<div class="header-warp">
+			<!-- <div class="header-social d-flex justify-content-end">
+				<p>About us:</p>
+				<a href="#"><i class="fa fa-pinterest"></i></a>
+				<a href="#"><i class="fa fa-facebook"></i></a>
+				<a href="#"><i class="fa fa-twitter"></i></a>
+			</div> -->
+			<div class="header-bar-warp d-flex">
+
+				<nav class="top-nav-area w-100">
+                    <!-- Login/Logout -->
+                    <div class="user-panel">
+                        {% if user.is_authenticated %}
+							<a href="{% url 'perfil' %}"><img src="{{ user.perfil.get_avatar_url }}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
+                          	<span class="me-2">Hola, {{ user.username }} | </span>
+                          	<form action="{% url 'logout' %}" method="post" style="display:inline;">
+								{% csrf_token %}
+								<button type="submit" class="btn btn-link p-0 m-0 align-baseline text-white">Logout</button>
+                        	</form></a>
+                        {% else %}
+                          <a href="{% url 'login' %}">Login</a> / <a href="{% url 'register' %}">Register</a>
+                        {% endif %}
+                    </div>
+                    <!-- Login/Logout end -->
+
+                    <!-- Menu -->
+					<ul class="main-menu primary-menu">
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% if user.is_authenticated %}{% url 'games' %}{% endif %}">Games</a>
+                            {% if user.is_staff %}
+                            <ul class="sub-menu">
+								<li><a href="{% url 'addGame' %}">Agregar juego</a></li>
+                            </ul>       
+                            {% endif %}
+                        </li>                     
+                        <li><a href="{% if user.is_authenticated %}{% url 'reviews' %}{% endif %}">Reviews</a>
+                            {% if user.is_authenticated %}
+                            <ul class="sub-menu">
+                                <li><a href="{% url 'addNew' %}">Agregar review</a></li>				
+                            </ul>  
+                            {% endif %}                     
+                        </li>
+                        <li><a href="{% if user.is_authenticated %}{% url 'platforms' %}{% endif %}">Plataformas</a>
+                            {% if user.is_staff %}
+                            <ul class="sub-menu">
+								<li><a href="{% url 'listPlatforms' %}">Listar plataformas</a></li>	
+                                <li><a href="{% url 'addPlatform' %}">Agregar plataforma</a></li>			
+                            </ul>
+                            {% endif %}	                       
+                        </li>
+						<li><a href="{% url 'about' %}">About me</a></li>   
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</header>
+	<!-- Header section end -->	
+
+    {% block content %}{% endblock %}
+
+	<!--====== Javascripts & Jquery ======-->
+	<script src="{% static 'AppGames/js/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static 'AppGames/js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'AppGames/js/jquery.slicknav.min.js' %}"></script>
+	<script src="{% static 'AppGames/js/owl.carousel.min.js' %}"></script>
+	<script src="{% static 'AppGames/js/jquery.sticky-sidebar.min.js' %}"></script>
+	<script src="{% static 'AppGames/js/jquery.magnific-popup.min.js' %}"></script>
+	<script src="{% static 'AppGames/js/main.js' %}"></script>
+
+	{% block scripts %}{% endblock %}
+
+	<!-- Footer section -->
+	<footer class="footer-section">
+		<div class="container">
+			<div class="footer-right-pic">
+				<img src="{% static 'AppGames/img/footer-right-pic.png' %}" alt="">
+			</div>
+			<ul class="main-menu footer-menu">
+				<li><a href="{% url 'home' %}">Home</a></li>
+				<li><a href="{% if user.is_authenticated %}{% url 'games' %}{% endif %}">Games</a>
+					{% if user.is_staff %}
+					<ul class="sub-menu">
+						<li><a href="{% url 'addGame' %}">Agregar juego</a></li>				
+					</ul>       
+					{% endif %}
+				</li>                     
+				<li><a href="{% if user.is_authenticated %}{% url 'reviews' %}{% endif %}">Reviews</a>
+					{% if user.is_authenticated %}
+					<ul class="sub-menu">
+						<li><a href="{% url 'addNew' %}">Agregar review</a></li>				
+					</ul>  
+					{% endif %}                     
+				</li>
+				<li><a href="{% if user.is_authenticated %}{% url 'platforms' %}{% endif %}">Plataformas</a>
+					{% if user.is_staff %}
+					<ul class="sub-menu">
+						<li><a href="{% url 'addPlatform' %}">Agregar plataforma</a></li>			
+					</ul>
+					{% endif %}	                       
+				</li>
+				<li><a href="{% url 'about' %}">About me</a></li>                            
+			</ul>
+			<div class="footer-social d-flex justify-content-center">
+				<a href="#"><i class="fa fa-pinterest"></i></a>
+				<a href="#"><i class="fa fa-facebook"></i></a>
+				<a href="#"><i class="fa fa-twitter"></i></a>
+			</div>
+			<div class="copyright">© {% now "Y" %} Good Game - @ All rights reserved</div>
+		</div>
+	</footer>
+	<!-- Footer section end -->
+	{% block footer %}{% endblock %}
+
+</body>
+</html>
