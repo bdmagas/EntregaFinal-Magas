@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Mapa del sitio | Good Game
+{% endblock %}
+
+{% block head_extra %}
+<style>
+    .sitemap-container {
+        background-color: transparent; /* elimina el fondo gris */
+        border: 1px solid rgba(255, 255, 255, 0.1); /* opcional: borde sutil */
+        padding: 1rem;
+        border-radius: 8px;
+    }
+    .sitemap-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        color: white;
+        background-color: rgba(255, 255, 255, 0.05); /* fondo apenas visible */
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        transition: background 0.3s;
+    } 
+
+    .sitemap-item:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .sitemap-item a {
+        color: #00bcd4;
+        margin-left: 6px;
+        text-decoration: none;
+    }       
+    .sitemap-list {
+        list-style: none;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+    }
+    .sitemap-list li {
+        background: transparent;
+        border: 1px solid #333;
+        padding: 20px;
+        border-radius: 12px;
+        transition: transform 0.2s;
+    }
+    .sitemap-list li:hover {
+        transform: translateY(-5px);
+        background-color: transparent;
+    }
+    .sitemap-list a {
+        text-decoration: none;
+        color: #f9b1f0;
+        font-weight: bold;
+        font-size: 18px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page top section -->
+<section class="page-top-section set-bg" data-setbg="{% static 'AppGames/img/page-top-bg/2.jpg' %}">
+    <div class="page-info">
+        <h2>Site map</h2>
+        <div class="site-breadcrumb">
+            <a href="{% url 'home' %}">Home</a> /
+            <span>Site map</span>
+        </div>
+    </div>
+</section>
+<!-- Page top end -->
+
+<section class="game-author-section">
+
+    <div class="sitemap-container mt-5 text-white">
+        <h2 class="mb-4"><img src={% static 'AppGames/img/icons/location.png' %} class="ci-icon" alt="#"> Mapa del sitio</h2>
+        <div class="sitemap-container">
+            {% for route in urls %}
+                <div class="sitemap-item">
+                    <i class="fa fa-link"></i> <strong>{{ route.name }}</strong>:
+                    <a href="/{{ route.url }}">{{ route.url }}</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="mt-5">
+        <div class="text-box text-center">
+            <a class="read-more" href="javascript:history.back()">Volver <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></a>
+        </div>
+    </div>    
+</section>
+{% endblock %}

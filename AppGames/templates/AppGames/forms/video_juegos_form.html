@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Games{% endblock %}
+
+{% block head_extra %}
+<style> 
+    .contact-form label {
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+        color: #fff;
+    }
+    .contact-form input[type="text"],
+    .contact-form input[type="date"],
+    .contact-form select,
+    .contact-form input[type="file"] {
+        width: 100%;
+        padding: 10px 12px;
+        margin-top: 5px;
+        margin-bottom: 20px;
+        border: 1px solid #444 !important;
+        border-radius: 8px;
+        background-color: #1e1e1e;
+        color: #ebb3f7;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }    
+    .contact-form input[type="text"]:focus,
+    .contact-form input[type="date"]:focus,
+    .contact-form select:focus {
+        outline: none;
+        border-color: #6c63ff !important;
+        box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
+    }
+    .contact-form select:focus,
+    .contact-form select:active,
+    .contact-form select option {
+        background-color: #1e1e1e !important;
+        color: #ebb3f7 !important;
+    }
+    .actual-img img {
+        border: 1px solid #555;
+        border-radius: 8px;
+        max-width: 100%;
+    }
+
+    .contact-form {
+        padding-top: 30px;
+    }
+
+    .mb-3 input[type="file"] {
+        color: #ccc;
+    }    
+</style>
+{% endblock %}
+
+{% block content %}
+	<!-- Page top section -->
+	<section class="page-top-section set-bg" data-setbg="{% static 'AppGames/img/page-top-bg/1.jpg' %}">
+		<div class="page-info">
+			<h2>Games</h2>
+			<div class="site-breadcrumb">
+				<a href="{% url 'home' %}">Home</a>  /
+				<a href="{% url 'games' %}">Games</a>  /
+				<span>Crear & Editar</span>
+			</div>
+		</div>
+	</section>
+	<!-- Page top end-->
+    
+	<!-- Games section -->
+    <section class="contact-page">
+		<div class="container">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="contact-form text-white">
+                    <p>{{ form.nombre.label_tag }} {{ form.nombre }}</p>
+                    <p>{{ form.genero.label_tag }} {{ form.genero }}</p>
+                    <p>{{ form.tag.label_tag }} {{ form.tag }}</p>
+                    <p>{{ form.plataformas.label_tag }} {{ form.plataformas }}</p>
+                    <p>{{ form.lanzamiento.label_tag }} {{ form.lanzamiento }}</p>
+
+                    <div class="mb-3 text-white">
+                        {{ form.imagen.label_tag }}
+                    </div>
+                    </label>                    
+                    {% if form.instance.imagen %}
+                        <div class="actual-img mb-2 mt-2">
+                            <img src="{{ form.instance.get_imagen_url }}"
+                                alt="Imagen actual"
+                                style="max-height: 150px; border: 1px solid #555; border-radius: 8px; margin-bottom: 15px;">
+                        </div>
+                    {% endif %}
+                </div>                     
+                <div class="mb-3 text-white">                
+                    {{ form.imagen }}
+                </div>   
+
+                <div class="mt-5">
+                    <div class="text-box">
+                        <button class="site-btn mt-4">Guardar <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></button>
+                        <a class="site-btn mt-4" href="javascript:history.back()">Cancelar <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+{% endblock %}
+

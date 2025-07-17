@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Nueva Review{% endblock %}
+
+{% block head_extra %}
+<style>
+    .star-rating {
+        direction: rtl;
+        font-size: 2rem;
+        unicode-bidi: bidi-override;
+        display: inline-flex;
+        gap: 5px;
+    }
+
+    .star-rating input {
+        display: none;
+    }
+
+    .star-rating label {
+        color: #888;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+    .star-rating input:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: #f5b301;
+    }
+
+    .contact-form label:not(.star-rating label) {
+        text-transform: uppercase;
+        font-weight: bold;
+        color: #fff;
+        display: block;
+        margin-bottom: 0.3rem;
+    }
+
+    .contact-form .form-group {
+        margin-bottom: 1.2rem;
+    }
+
+    .contact-form input,
+    .contact-form select,
+    .contact-form textarea {
+        width: 100%;
+        padding: 0.6rem;
+        border: 1px solid #444;
+        background-color: #222;
+        color: #fff;
+        border-radius: 5px;
+    }
+
+    .text-box {
+        text-align: center;
+    }
+
+    .text-box .site-btn {
+        margin: 0 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+	<!-- Page top section -->
+	<section class="page-top-section set-bg" data-setbg="{% static 'AppGames/img/page-top-bg/3.jpg' %}">
+		<div class="page-info">
+			<h2>Reviews</h2>
+			<div class="site-breadcrumb">
+				<a href="{% url 'home' %}">Home</a>  /
+				<a href="{% url 'reviews' %}">Reviews</a>  /
+				<span>Add review</span>
+			</div>
+		</div>
+	</section>
+	<!-- Page top end-->
+
+    <section class="contact-page">
+		<div class="container">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="contact-form text-white">
+                    <div class="form-group">
+                        {{ form.juego.label_tag }}
+                        {{ form.juego }}
+                    </div>
+                    <!-- Estrellas -->
+                    <div class="form-group">
+                        {{ form.estrellas.label_tag|safe }}
+                        <div class="star-rating">
+                            {% for i in "54321" %}
+                                <input type="radio" id="star{{ i }}" name="estrellas" value="{{ i }}"
+                                    {% if form.estrellas.value == i %}checked{% endif %}>
+                                <label for="star{{ i }}" title="{{ i }} estrellas">&#9733;</label>
+                            {% endfor %}
+                        </div>
+                        {{ form.estrellas.errors }}
+                    </div> 
+
+                    <div class="form-group">
+                        {{ form.user_name.label_tag }}
+                        {{ form.user_name }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.comentarios.label_tag }}
+                        {{ form.comentarios }}
+                        {% if form.comentarios.errors %}
+                            <div class="form-errors">{{ form.comentarios.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="submit" class="site-btn">Enviar <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#" /></button>
+                    <a href="javascript:history.back()" class="site-btn">Cancelar <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#" /></a>
+                </div>
+            </form>
+        </div>
+    </section>
+{% endblock %}

@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
@@ -19,6 +20,12 @@ class VideoJuego(models.Model):
     def __str__(self):
         return self.nombre
     
+    def get_imagen_url(self):
+        # Si no encuentra imagen que cargue una por defecto
+        if self.imagen:
+            return self.imagen.url
+        return '/static/AppGames/img/games/3.jpg'
+    
 class Valoracion(models.Model):
     user_name = models.CharField(max_length=50)
     juego = models.ForeignKey(VideoJuego, on_delete=models.CASCADE)
@@ -28,3 +35,11 @@ class Valoracion(models.Model):
 
     def __str__(self):
         return f"{self.juego.nombre} - {self.estrellas} estrellas"
+    
+class Favorito(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    juego = models.ForeignKey(VideoJuego, on_delete=models.CASCADE)
+    fecha_agregado = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('usuario', 'juego')  # No repetir favoritos

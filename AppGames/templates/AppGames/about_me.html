@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About me{% endblock %}
+
+{% block head_extra %}
+<style>
+    .game-author-info {
+        background-color: #1c1c1c;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(236, 57, 252, 0.2);
+        color: #f9b1f0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        animation: fadeInUp 1s ease;
+        transition: all 0.3s ease;
+    }
+
+    .game-author-info h2 {
+        color: #82229d;
+        font-size: 36px;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .game-author-info p {
+        font-size: 18px;
+        line-height: 1.8;
+        margin-bottom: 20px;
+    }
+
+    .text-box .read-more {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 30px;
+        background: #c77d0eba;
+        color: rgba(110, 4, 149, 0.584);
+        text-decoration: none;
+        font-weight: bold;
+        transition: background 0.3s;
+    }
+
+    .text-box .read-more:hover {
+        background: #f97f05f1;
+        color: rgba(110, 4, 149, 0.584);
+    }
+
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Page top section -->
+<section class="page-top-section set-bg" data-setbg="{% static 'AppGames/img/page-top-bg/2.jpg' %}">
+    <div class="page-info">
+        <h2>About me</h2>
+        <div class="site-breadcrumb">
+            <a href="{% url 'home' %}">Home</a> /
+            <span>About me</span>
+        </div>
+    </div>
+</section>
+<!-- Page top end -->
+
+<section class="game-author-section">
+    <div class="container text-center">
+
+        <div class="game-author-info">
+
+            <h2>About Me</h2>
+            <p>
+                Hola, soy fan de los videojuegos desde que tengo memoria (o desde que perdí mi primera partida en el Mario Kart). Me encanta programar, romper cosas sin querer y luego arreglarlas como si hubiera sido parte del plan.
+            </p>
+            <p>
+                Este proyecto nació de la combinación de dos cosas: los juegos y el curso de coder. ¿El resultado? Esta web, que probablemente seguirá evolucionando entre café, bugs y alguna que otra partida online.
+            </p>
+            <p>
+                ¿Pasatiempos? Jugar partidas, mirar juegos de terror indies, hacer commits con mensajes misteriosos y pelearme con bugs que ayer no existían (¡juro que no los toqué!).
+            </p>
+            <p>
+                ¡Gracias por pasar! Si te gusta este proyecto, genial. Y si no... bueno, ¡igual te agradezco por pasar!
+            </p>
+
+            <div class="mt-5">
+                <div class="text-box text-center">
+                    <a class="read-more" href="javascript:history.back()">Volver <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

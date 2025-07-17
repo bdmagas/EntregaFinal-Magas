@@ -1,0 +1,9 @@
+__pycache__/
+db.sqlite3
+*.sqlite3
+
+*/migrations/__pycache__/
+.env
+.venv
+
+# Aclaración: media/ se incluye porque contiene imágenes de ejemplo

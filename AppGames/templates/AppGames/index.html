@@ -1,4 +1,4 @@
-{% extends "AppGames/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block title %}
@@ -13,63 +13,6 @@ Home | Good Game
 {% endblock %}
 
 {% block content %}
-
-	<!-- Header section -->
-	<header class="header-section">
-		<div class="header-warp">
-			<div class="header-social d-flex justify-content-end">
-				<p>Follow us:</p>
-				<a href="#"><i class="fa fa-pinterest"></i></a>
-				<a href="#"><i class="fa fa-facebook"></i></a>
-				<a href="#"><i class="fa fa-twitter"></i></a>
-			</div>
-			<div class="header-bar-warp d-flex">
-
-				<nav class="top-nav-area w-100">
-                    <!-- Login/Logout -->
-                    <div class="user-panel">
-                        {% if user.is_authenticated %}
-                          <span class="me-2">Bienvenido, {{ user.username }} | </span>
-                          <form action="{% url 'logout' %}" method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-link p-0 m-0 align-baseline text-white">Logout</button>
-                        </form>
-                        {% else %}
-                          <a href="{% url 'login' %}">Login</a> / <a href="{% url 'register' %}">Register</a>
-                        {% endif %}
-                    </div>
-                    <!-- Login/Logout end -->
-
-                    <!-- Menu -->
-					<ul class="main-menu primary-menu">
-                        <li><a href="{% url 'home' %}">Home</a></li>
-                        <li><a href="{% if user.is_authenticated %}{% url 'games' %}{% endif %}">Games</a>
-                            {% if user.is_staff %}
-                            <ul class="sub-menu">
-                                <li><a href="{% url 'addGame' %}">Agregar juego</a></li>				
-                            </ul>       
-                            {% endif %}
-                        </li>                     
-                        <li><a href="{% if user.is_authenticated %}{% url 'reviews' %}{% endif %}">Reviews</a>
-                            {% if user.is_authenticated %}
-                            <ul class="sub-menu">
-                                <li><a href="{% url 'addNew' %}">Agregar review</a></li>				
-                            </ul>  
-                            {% endif %}                     
-                        </li>
-                        <li><a href="{% if user.is_authenticated %}{% url 'platforms' %}{% endif %}">Plataformas</a>
-                            {% if user.is_staff %}
-                            <ul class="sub-menu">
-                                <li><a href="{% url 'addPlatform' %}">Agregar plataforma</a></li>			
-                            </ul>
-                            {% endif %}	                       
-                        </li>                           
-					</ul>
-				</nav>
-			</div>
-		</div>
-	</header>
-	<!-- Header section end -->
 
 	<!-- Hero section -->
 	<section class="hero-section overflow-hidden">

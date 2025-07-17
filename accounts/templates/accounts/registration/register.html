@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Registro{% endblock %}
+
+{% block head_extra %}
+<style>
+    .contact-form label {
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+    .errorlist {
+        color: red;
+        font-weight: bold;
+        list-style: none;
+        padding-left: 0;
+        margin-top: 0.5rem;
+    }      
+</style>
+{% endblock %}
+
+{% block content %}
+
+	<!-- Page top section -->
+	<section class="page-top-section set-bg" data-setbg="{% static 'AppGames/img/page-top-bg/2.jpg' %}">
+		<div class="page-info">
+			<h2>Register</h2>
+			<div class="site-breadcrumb">
+				<a href="{% url 'home' %}">Home</a> /
+				<span>Register</span>
+			</div>
+		</div>
+	</section>
+	<!-- Page top end -->
+
+    <section class="contact-page">
+		<div class="container text-white">
+            <h2>Crear una cuenta</h2>
+            <form method="post">
+                {% csrf_token %}
+ 
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        {% if form.non_field_errors %}
+                            {% for error in form.non_field_errors %}
+                                <div><strong>Error:</strong> {{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <div><strong>{{ field.label }}:</strong> {{ error }}</div>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Campo username -->
+                <div class="contact-form mt-3">
+                    {{ form.username.label_tag }}
+                    {{ form.username }}
+                </div>
+    
+                <!-- Campo nombre -->
+                <div class="contact-form">
+                    {{ form.first_name.label_tag }}
+                    {{ form.first_name }}
+                </div>
+
+                <!-- Campo apellido -->
+                <div class="contact-form">
+                    {{ form.last_name.label_tag }}
+                    {{ form.last_name }}
+                </div>
+
+                <!-- Campo email -->
+                <div class="contact-form">
+                    {{ form.email.label_tag }}
+                    {{ form.email }}
+                </div>
+
+                <!-- Campo password1 -->
+                <div class="contact-form">
+                    {{ form.password1.label_tag }}
+                    {{ form.password1 }}
+                </div>
+        
+                <!-- Campo password2 -->
+                <div class="contact-form">
+                    {{ form.password2.label_tag }}
+                    {{ form.password2 }}
+                </div>
+
+                <button class="site-btn mt-3">Registrar <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></button>
+            </form>
+        </div>
+    </section>
+{% endblock %}
