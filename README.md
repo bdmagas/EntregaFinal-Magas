@@ -1,4 +1,4 @@
-# TuPrimeraPagina-Magas
+# EntregaFinal-Magas
 
 # 🎮 GG - Good Game
 
@@ -22,27 +22,60 @@ Sitio web para fans de los videojuegos, creado con django. Permite gestionar vid
 ## 🏗️ Estructura del Proyecto
 
 ```
-AppGames/
-├── templates/
-│   ├── AppGames/
-│   │   ├── base.html
-│   │   ├── index.html              ← Página de inicio
-│   │   ├── video_juegos.html       ← Listado de videojuegos con filtros
-│   │   ├── valoraciones.html       ← Lista ordenada por calificación
-│   │   ├── plataformas.html        ← Juegos por plataforma
-│   │   ├── *_form.html             ← Formularios para agregar datos
-│   └── registration/
-│       ├── login.html
-│       └── register.html
-├── static/
-│   └── AppGames/                   ← Imágenes, íconos, estilos, JS
+EntregaFinal-Magas/
+├── AppGames/                        ← App principal con juegos, páginas, valoraciones, etc.
+│   ├── templates/
+│   │   ├── AppGames/
+│   │   │   ├── base.html
+│   │   │   ├── index.html               ← Página de inicio
+│   │   │   ├── video_juegos.html        ← Juegos con filtros, favoritos, búsqueda
+│   │   │   ├── plataformas.html         ← Juegos por plataforma
+│   │   │   ├── valoraciones.html        ← Reviews por puntuación
+│   │   │   ├── about.html               ← Página "Acerca de mí"
+│   │   │   ├── sitemap.html             ← Mapa de navegación
+│   │   │   ├── *_form.html              ← Formularios para juegos, páginas, etc.
+│   ├── static/
+│   │   └── AppGames/                    ← Imágenes, íconos, estilos, JS
+│   ├── models.py
+│   ├── views/
+│   │   └── general.py
+│   │   └── plataformas.py
+│   │   └── valoraciones.py
+│   │   └── video_juegos.py
+│   ├── urls.py
+│   ├── forms.py
+│   └── admin.py
+│
+├── accounts/                        ← App separada para autenticación y perfiles de usuario
+│   ├── templates/
+│   │   ├── accounts/
+│   │   │   ├── profile.html               ← Vista de perfil
+│   │   │   ├── edit_profile.html          ← Edición de perfil
+│   │   │   ├── password_change.html       ← Cambio de contraseña
+│   │   │   ├── password_change_done.html  ← Contraseña modificada ok!
+│   │   └── registration/
+│   │       ├── login.html               ← Login
+│   │       └── register.html            ← Registro
+│   ├── models.py                      ← Modelo extendido Profile
+│   ├── views.py                       ← Vistas de login, registro, perfil, etc.
+│   ├── forms.py                       ← Formulario de perfil
+│   ├── urls.py                        ← URLs de accounts
+│   └── admin.py
+│
+├── media/                           ← Avatares subidos por usuarios (excluidos por .gitignore)
 ├── fixtures/
-│   └── datos_iniciales.json       ← Datos precargados
-│   └── usuarios.json              ← usuarios precargados
-├── models.py                      ← Modelos: VideoJuego, Plataforma, Valoración
-├── views.py                       ← Vistas lógicas
-├── urls.py                        ← Rutas internas
-├── forms.py                       ← Formularios personalizados
+│   ├── datos_iniciales.json
+│   ├── usuarios.json
+├── db.sqlite3                       ← (Ignorado en el repo)
+├── manage.py
+├── requirements.txt
+├── .gitignore
+├── README.md
+└── proyecto_web_django/         ← Carpeta del proyecto Django (settings, urls, wsgi)
+    ├── settings.py
+    ├── urls.py
+    └── ...
+
 ```
 
 ---
@@ -52,7 +85,7 @@ AppGames/
 - `VideoJuego`: nombre, género, plataformas, fecha, tag.
 - `Plataforma`: nombre.
 - `Valoracion`: videojuego, estrellas (1-5), comentario.
-
+- `Perfil`: user, avatar, fecha_nacimiento.
 ---
 
 
@@ -116,33 +149,52 @@ Y navegá a:
 - Anuncio especial destacado.
 
 ### 🔐 Autenticación
-- Registro de usuarios.
+- Registro, login y logout de usuarios.
 - Login con sistema de Django.
-- Acceso limitado a ciertas funciones (si se configura).
+- Acceso limitado a ciertas funciones (dependiendo del perfil del usuario staff/no staff).
 
-##### Importante
-##### Hay que Loguearse para poder ingresar a las siguientes secciones (Games/Reviews/Plataformas)
+### 👤 Perfil de usuario
+- Perfil de usuario con los campos: nombre, apellido, avatar, email, fecha de cumpleaños.
+- Edición del perfil: /perfil/edit
+- Avatar: Carga de imagen de perfil.
+- Cambio de contraseña: /perfil/password_change
 
 ### 🎲 Videojuegos (`/games`)
 - Listado de juegos con imagen y descripción.
-- Filtro por letra (A-Z).
+- Filtro por letra (A-Z), género y tags.
 - Paginación integrada.
+- Buscador integrado.
+- Marcar como favorito (AJAX toggle).
+- Estilo visual atractivo con cards.
+- Link en la card del juego para entrar a vista detallada
+
 
 ### 🖥️ Plataformas (`/platforms`)
 - Muestra todas las plataformas.
 - Al hacer clic, filtra los videojuegos según la plataforma elegida.
 
 ### ⭐ Valoraciones (`/reviews`)
-- Lista de valoraciones ordenadas por puntaje.
+- Lista de valoraciones ordenadas por estrellas.
 - Posibilidad de filtrar por estrellas (1 a 5).
-- Comentarios del usuario.
+- Valoración incluye: juego, plataforma, comentario y fecha.
+- Estilo visual atractivo con cards.
+
+##### Importante
+##### Hay que Loguearse para poder ingresar a las siguientes secciones (Games/Reviews/Plataformas)
 
 ### 📝 Formularios
-- Crear nuevo videojuego. --> solo para usuarios admin
-- Agregar nuevas plataformas. --> solo para usuarios admin
+- Crear/Editar/Borrar nuevo videojuego. --> solo para usuarios admin
+- Agregar/Editar/Borrar nuevas plataformas. --> solo para usuarios admin
 - Dejar una valoración con estrellas y comentario.
 
 ---
+
+## 📄 Páginas informativas (/about/)
+- Página de "Acerca de mí": /about
+
+## 🗺️ Mapa del sitio (/sitemap)
+- Muestra las rutas principales de la app.
+
 
 ## 🛠 Para el Admin
 
@@ -153,22 +205,24 @@ Y navegá a:
 
 ## 📷 Créditos de imágenes
 
-- Template original: [Colorlib](https://colorlib.com/)
+- Template base: Themewagon / EndGame
+- Íconos: FontAwesome
 - Imágenes utilizadas solo con fines educativos.
 
 ---
 
 ## 💡 Mejoras futuras
 
-- Sistema de favoritos por usuario.
+- Rating promedio en cada juego. ✅
+- Mejorar el sistema de favoritos por usuario.
 - Comentarios entre usuarios.
-- Rating promedio en cada juego.
 
 ---
 
 ## 💻 Desarrollado por
 
 Barbie Magas  
-Curso de Python + CODEHOUSE
+Entrega Final
+Curso de Python + Django + CODEHOUSE
 
 ---

@@ -8,6 +8,30 @@
 	<meta name="description" content="Good Game - Gaming Magazine">
 	<meta name="keywords" content="GG, Gaming, magazine, html">
 
+	{% if not user.is_authenticated %}
+	<style>
+	.main-menu li a:after {
+		position: absolute;
+		content: "";
+		width: 20px;
+		height: 20px;
+		right: 0;
+		top: 1px;
+		background-image: none !important;
+		background-repeat: no-repeat;
+		background-position: right center;
+	}
+
+	.main-menu li a:hover:after {
+		background-image: none !important;
+	}
+
+	.main-menu li:hover>a:after {
+		background-image: none !important;
+	}
+	</style>
+	{% endif %}
+
 	{% block head_extra %}{% endblock %}
 
 	<!-- Favicon -->
@@ -40,62 +64,76 @@
 	<!-- Header section -->
 	<header class="header-section">
 		<div class="header-warp">
-			<!-- <div class="header-social d-flex justify-content-end">
-				<p>About us:</p>
-				<a href="#"><i class="fa fa-pinterest"></i></a>
-				<a href="#"><i class="fa fa-facebook"></i></a>
-				<a href="#"><i class="fa fa-twitter"></i></a>
-			</div> -->
 			<div class="header-bar-warp d-flex">
-
 				<nav class="top-nav-area w-100">
+
+				 {% if user.is_authenticated %}
                     <!-- Login/Logout -->
                     <div class="user-panel">
-                        {% if user.is_authenticated %}
-							<a href="{% url 'perfil' %}"><img src="{{ user.perfil.get_avatar_url }}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
-                          	<span class="me-2">Hola, {{ user.username }} | </span>
-                          	<form action="{% url 'logout' %}" method="post" style="display:inline;">
-								{% csrf_token %}
-								<button type="submit" class="btn btn-link p-0 m-0 align-baseline text-white">Logout</button>
-                        	</form></a>
-                        {% else %}
-                          <a href="{% url 'login' %}">Login</a> / <a href="{% url 'register' %}">Register</a>
-                        {% endif %}
+						<a href="{% url 'perfil' %}"><img src="{{ user.perfil.get_avatar_url }}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
+						<span class="me-2">Hola, {{ user.username }} | </span>
+						<form action="{% url 'logout' %}" method="post" style="display:inline;">
+							{% csrf_token %}
+							<button type="submit" class="btn btn-link p-0 m-0 align-baseline text-white">Logout</button>
+						</form></a>
                     </div>
                     <!-- Login/Logout end -->
 
                     <!-- Menu -->
 					<ul class="main-menu primary-menu">
-                        <li><a href="{% url 'home' %}">Home</a></li>
-                        <li><a href="{% if user.is_authenticated %}{% url 'games' %}{% endif %}">Games</a>
+						<li><a href="{% url 'home' %}">Home</a>
+							{% if user.is_staff %}
+							<ul class="sub-menu">
+								<li><a href="{% url 'sitemap' %}">Mapa del sitio</a></li>
+							</ul>
+							{% endif %}
+						</li>				
+                        <li><a href="{% url 'games' %}">Games</a>
                             {% if user.is_staff %}
                             <ul class="sub-menu">
-								<li><a href="{% url 'addGame' %}">Agregar juego</a></li>
+								<li><a href="{% url 'listGames' %}">Lista de juegos</a></li>
+								<li><a href="{% url 'addGame' %}">Crear juego</a></li>
                             </ul>       
                             {% endif %}
                         </li>                     
-                        <li><a href="{% if user.is_authenticated %}{% url 'reviews' %}{% endif %}">Reviews</a>
-                            {% if user.is_authenticated %}
+                        <li><a href="{% url 'reviews' %}">Reviews</a>
                             <ul class="sub-menu">
                                 <li><a href="{% url 'addNew' %}">Agregar review</a></li>				
                             </ul>  
-                            {% endif %}                     
                         </li>
-                        <li><a href="{% if user.is_authenticated %}{% url 'platforms' %}{% endif %}">Plataformas</a>
+                        <li><a href="{% url 'platforms' %}">Plataformas</a>
                             {% if user.is_staff %}
                             <ul class="sub-menu">
 								<li><a href="{% url 'listPlatforms' %}">Listar plataformas</a></li>	
-                                <li><a href="{% url 'addPlatform' %}">Agregar plataforma</a></li>			
+                                <li><a href="{% url 'addPlatform' %}">Agregar plataforma</a></li>
                             </ul>
                             {% endif %}	                       
                         </li>
 						<li><a href="{% url 'about' %}">About me</a></li>   
 					</ul>
+					<!-- Menu End -->
+
+				 {% else %}
+                    <!-- Login/Logout -->
+                    <div class="user-panel">
+                          <a href="{% url 'login' %}">Login</a> / <a href="{% url 'register' %}">Register</a>
+                    </div>
+                    <!-- Login/Logout end -->				 
+
+					<!-- Menu -->
+					<ul class="main-menu primary-menu">
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'games' %}">Games</a></li>                     
+                        <li><a href="{% url 'reviews' %}">Reviews</a></li>
+                        <li><a href="{% url 'platforms' %}">Plataformas</a></li>
+						<li><a href="{% url 'about' %}">About me</a></li>   
+					</ul>
+					<!-- Menu End -->
+				 {% endif %}
 				</nav>
 			</div>
 		</div>
 	</header>
-	<!-- Header section end -->	
 
     {% block content %}{% endblock %}
 
@@ -118,34 +156,11 @@
 			</div>
 			<ul class="main-menu footer-menu">
 				<li><a href="{% url 'home' %}">Home</a></li>
-				<li><a href="{% if user.is_authenticated %}{% url 'games' %}{% endif %}">Games</a>
-					{% if user.is_staff %}
-					<ul class="sub-menu">
-						<li><a href="{% url 'addGame' %}">Agregar juego</a></li>				
-					</ul>       
-					{% endif %}
-				</li>                     
-				<li><a href="{% if user.is_authenticated %}{% url 'reviews' %}{% endif %}">Reviews</a>
-					{% if user.is_authenticated %}
-					<ul class="sub-menu">
-						<li><a href="{% url 'addNew' %}">Agregar review</a></li>				
-					</ul>  
-					{% endif %}                     
-				</li>
-				<li><a href="{% if user.is_authenticated %}{% url 'platforms' %}{% endif %}">Plataformas</a>
-					{% if user.is_staff %}
-					<ul class="sub-menu">
-						<li><a href="{% url 'addPlatform' %}">Agregar plataforma</a></li>			
-					</ul>
-					{% endif %}	                       
-				</li>
-				<li><a href="{% url 'about' %}">About me</a></li>                            
+				<li><a href="{% url 'games' %}">Games</a></li>                     
+				<li><a href="{% url 'reviews' %}">Reviews</a></li>
+				<li><a href="{% url 'platforms' %}">Plataformas</a></li>
+				<li><a href="{% url 'about' %}">About me</a></li>   
 			</ul>
-			<div class="footer-social d-flex justify-content-center">
-				<a href="#"><i class="fa fa-pinterest"></i></a>
-				<a href="#"><i class="fa fa-facebook"></i></a>
-				<a href="#"><i class="fa fa-twitter"></i></a>
-			</div>
 			<div class="copyright">© {% now "Y" %} Good Game - @ All rights reserved</div>
 		</div>
 	</footer>

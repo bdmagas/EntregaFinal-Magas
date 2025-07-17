@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 from AppGames.views.video_juegos import ver_videojuegos, VideoJuegoListView, VideoJuegoUpdateView, VideoJuegoDeleteView, VideoJuegoCreateView, VideoJuegoDetailView
 from AppGames.views.plataformas import plataformas, PlataformaListView, PlataformaCreateView, PlataformaDeleteView, PlataformaUpdateView
 from AppGames.views.valoraciones import valoraciones, nueva_valoracion
-from AppGames.views.general import inicio, about, toggle_favorito
+from AppGames.views.general import inicio, about, toggle_favorito, sitemap
 
 urlpatterns = [
     path('', inicio, name='home'),  # Home
@@ -29,5 +29,7 @@ urlpatterns = [
     path('reviews/addNew', nueva_valoracion, name='addNew'), # Agregar review
 
     path('about/', about, name='about'), # About me
+
+    path('sitemap/', sitemap, name='sitemap'), # Mapa del sitio
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
