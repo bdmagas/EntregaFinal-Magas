@@ -94,8 +94,8 @@ EntregaFinal-Magas/
 
 1. **Cloná el repositorio**
 ```bash
-git clone https://github.com/bdmagas/TuPrimeraPagina-Magas.git
-cd TuPrimeraPagina-Magas
+git clone https://github.com/bdmagas/EntregaFinal-Magas.git
+cd EntregaFinal-Magas
 ```
 
 2. **Creá y activá un entorno virtual**
@@ -117,22 +117,20 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-5. **Crear superusuario**
-```bash
-python manage.py createsuperuser
-```
-
 6. **Cargar datos de ejemplo**
 ⚠️ **Opcional:** Este paso es necesario **solo si estás generando la base de datos desde cero**  
 Si ya clonaste el proyecto con el archivo db.sqlite3, podés saltearlo.
 
-## Carpeta media/ (imágenes de ejemplo)
-⚠️ **Importante:** Este proyecto incluye una carpeta media/ con imágenes de ejemplo utilizadas por algunos juegos precargados en la base de datos. Estas imágenes se cargan automáticamente al importar el archivo datos_iniciales.json.
-
-No elimines ni ignores esta carpeta, ya que muchas referencias en la base de datos apuntan a imágenes dentro de media/, y el sitio puede fallar si no están presentes.
-
 ```bash
 python manage.py loaddata AppGames/fixtures/datos_iniciales.json
+```
+
+**Carpeta** /media/ (imágenes de ejemplo) **
+⚠️ **Importante:** Este proyecto incluye una carpeta media/ con imágenes de ejemplo utilizadas por algunos juegos precargados en la base de datos. Estas imágenes se cargan automáticamente al importar el archivo datos_iniciales.json. No elimines ni ignores esta carpeta, ya que muchas referencias en la base de datos apuntan a imágenes dentro de media/, y el sitio puede fallar si no están presentes.
+
+5. **Crear superusuario**
+```bash
+python manage.py createsuperuser
 ```
 
 7. **¡Ejecutá el servidor!**
