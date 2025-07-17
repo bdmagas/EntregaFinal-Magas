@@ -9,8 +9,7 @@
         direction: rtl;
         font-size: 2rem;
         unicode-bidi: bidi-override;
-        display: flex;
-        justify-content: start;
+        display: inline-flex;
         gap: 5px;
     }
 
@@ -19,7 +18,7 @@
     }
 
     .star-rating label {
-        color: #555;
+        color: #888;
         cursor: pointer;
         transition: color 0.2s;
     }
@@ -30,10 +29,36 @@
         color: #f5b301;
     }
 
-    form label:not(.star-rating label) {
-        color: #444;
-        font-weight: 500; 
-    }   
+    .contact-form label:not(.star-rating label) {
+        text-transform: uppercase;
+        font-weight: bold;
+        color: #fff;
+        display: block;
+        margin-bottom: 0.3rem;
+    }
+
+    .contact-form .form-group {
+        margin-bottom: 1.2rem;
+    }
+
+    .contact-form input,
+    .contact-form select,
+    .contact-form textarea {
+        width: 100%;
+        padding: 0.6rem;
+        border: 1px solid #444;
+        background-color: #222;
+        color: #fff;
+        border-radius: 5px;
+    }
+
+    .text-box {
+        text-align: center;
+    }
+
+    .text-box .site-btn {
+        margin: 0 10px;
+    }
 </style>
 {% endblock %}
 
@@ -52,47 +77,46 @@
 	</section>
 	<!-- Page top end-->
 
-<div class="container mt-5 text-white">
-    <form method="post">
-        {% csrf_token %}
+    <section class="contact-page">
+		<div class="container">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="contact-form text-white">
+                    <div class="form-group">
+                        {{ form.juego.label_tag }}
+                        {{ form.juego }}
+                    </div>
+                    <!-- Estrellas -->
+                    <div class="form-group">
+                        {{ form.estrellas.label_tag|safe }}
+                        <div class="star-rating">
+                            {% for i in "54321" %}
+                                <input type="radio" id="star{{ i }}" name="estrellas" value="{{ i }}"
+                                    {% if form.estrellas.value == i %}checked{% endif %}>
+                                <label for="star{{ i }}" title="{{ i }} estrellas">&#9733;</label>
+                            {% endfor %}
+                        </div>
+                        {{ form.estrellas.errors }}
+                    </div> 
 
-        <!-- Juego -->
-        <div class="form-group">
-            {{ form.juego.label_tag|safe }}
-            {{ form.juego }}
-            {{ form.juego.errors }}
+                    <div class="form-group">
+                        {{ form.user_name.label_tag }}
+                        {{ form.user_name }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.comentarios.label_tag }}
+                        {{ form.comentarios }}
+                        {% if form.comentarios.errors %}
+                            <div class="form-errors">{{ form.comentarios.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="submit" class="site-btn">Enviar <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#" /></button>
+                    <a href="{% url 'reviews' %}" class="site-btn">Cancelar <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#" /></a>
+                </div>
+            </form>
         </div>
-
-        <!-- Estrellas -->
-        <div class="form-group mt-3">
-            {{ form.estrellas.label_tag|safe }}
-            <div class="star-rating">
-                {% for i in "54321" %}
-                    <input type="radio" id="star{{ i }}" name="estrellas" value="{{ i }}"
-                           {% if form.estrellas.value == i %}checked{% endif %}>
-                    <label for="star{{ i }}" title="{{ i }} estrellas">&#9733;</label>
-                {% endfor %}
-            </div>
-            {{ form.estrellas.errors }}
-        </div>
-        
-        <!-- user_name -->
-        <div class="form-group mt-3">
-            {{ form.user_name.label_tag|safe }}
-            {{ form.user_name }}
-            {{ form.user_name.errors }}
-        </div>
-
-        <!-- Comentario -->
-        <div class="form-group mt-3">
-            {{ form.comentarios.label_tag|safe }}
-            {{ form.comentarios }}
-            {{ form.comentarios.errors }}
-        </div>
-
-        <!-- <button type="submit" class="btn btn-primary mt-3">Enviar</button> -->
-        <button class="site-btn">Enviar<img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></button>
-
-    </form>
-</div>
+    </section>
 {% endblock %}

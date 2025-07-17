@@ -6,10 +6,10 @@ Games | Good Game
 {% endblock %}
 
 {% block head_extra %}
-	<meta name="robots" content="noindex, nofollow">
-	<meta name="description" content="¡Bienvenido a la mejor comunidad gamer!">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="¡Bienvenido a la mejor comunidad gamer!">
 
-    <style>
+<style>
     .scroll-box {
         max-height: 400px; /* altura máxima visible */
         overflow-y: auto;
@@ -26,7 +26,73 @@ Games | Good Game
         background-color: #999;
         border-radius: 10px;
     }
-    </style>
+    .card img {
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+    .card-body {
+        background-color: #f6bfbf8b; 
+    }        
+    .game-card {
+        background-color: rgba(255, 255, 255, 0.07);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .game-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+    }
+
+    .game-img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .game-content {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: #fff;
+        font-size: 0.95rem;
+        border-radius: 0 0 12px 12px;
+    }
+
+    .read-more {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-weight: bold;
+        color: #fff;
+        background-color: #cc5201a2;
+        padding: 6px 12px;
+        border-radius: 25px;
+        transition: background-color 0.2s ease;
+        font-size: 0.9rem;
+    }
+
+    .read-more:hover {
+        background-color: #d94f00;
+        text-decoration: none;
+    }    
+    .favorite-icon {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 1.4rem;
+        color: #ff6b81;
+        z-index: 10;
+        text-decoration: none;
+        transition: transform 0.2s ease;
+    }
+
+    .favorite-icon:hover {
+        transform: scale(1.2);
+        color: #e63946;
+    }    
+</style>
 
 {% endblock %}
 
@@ -61,27 +127,43 @@ Games | Good Game
 
 			<div class="row">
                 <div class="col-lg-9">
-                    <div class="row">                
+                    <div class="row">             
                         {% for juego in page_obj %}
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100">
-                                {% if juego.imagen %}
-                                    <img src="{{ juego.imagen.url }}" class="card-img-top" alt="{{ juego.nombre }}">
-                                {% else %}
-                                    <img src="{% static 'AppGames/img/default.jpg' %}" class="card-img-top" alt="Sin imagen">
-                                {% endif %}
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ juego.nombre }}</h5>
-                                    <p class="card-text">
-                                        Género: {{ juego.genero }}<br>
-                                        Plataformas: {{ juego.plataformas.all|join:", " }}<br>
-                                        Lanzamiento: {{ juego.lanzamiento }}<br>
-                                        Tag: {{ juego.tag }}
-                                    </p>
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="game-card h-100 d-flex flex-column position-relative">                   
+
+                                <img src="{{ juego.get_imagen_url }}" alt="{{ juego.nombre }}" class="img-fluid game-img">
+                                <div class="game-content flex-grow-1 d-flex flex-column justify-content-between p-3">
+                                    <div>
+                                        <h5 class="mb-2 d-flex justify-content-between align-items-center">
+                                        {{ juego.nombre }}
+                                        {% if request.user.is_authenticated %}
+                                        <button class="fav-btn btn btn-link p-0" data-id="{{ juego.id }}">
+                                            {% if juego.id in favoritos %}
+                                                <i class="fas fa-heart text-danger"></i>  {# Rojo si es favorito #}
+                                            {% else %}
+                                                <i class="fas fa-heart text-muted"></i>  {# Gris si no lo es #}
+                                            {% endif %}
+                                        </button>
+                                        {% endif %}
+                                        </h5>                                        
+                                        <p class="mb-2">
+                                            <strong>Género:</strong> {{ juego.genero }}<br>
+                                            <strong>Plataformas:</strong> {{ juego.plataformas.all|join:", " }}<br>
+                                            <!-- <strong>Lanzamiento:</strong> {{ juego.lanzamiento }}<br> -->
+                                            <!-- <strong>Tag:</strong> {{ juego.tag }} -->
+                                        </p>
+                                    </div>
+                                    <div class="mt-2 text-end">
+                                        <a href="{% url 'detailGame' juego.id %}" class="read-more">Ver más 
+                                            <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         {% endfor %}
+
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -126,7 +208,7 @@ Games | Good Game
                 </div>
             </div>
              <!-- Pagination -->
-            <div class="site-pagination">
+            <div class="site-pagination justify-content-center">
                 {% if page_obj.has_previous %}
                     <a href="?page={{ page_obj.previous_page_number }}{% if letra %}&letra={{ letra }}{% endif %}">&laquo;</a>
                 {% endif %}
@@ -147,4 +229,11 @@ Games | Good Game
 		</div>
 	</section>
 	<!-- Games end-->
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    const csrfToken = '{{ csrf_token }}';
+  </script>
+  <script src="{% static 'AppGames/js/favoritos.js' %}"></script>
 {% endblock %}

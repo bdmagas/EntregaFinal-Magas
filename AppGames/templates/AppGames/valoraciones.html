@@ -7,19 +7,90 @@ Reviews | Good Game
 
 {% block head_extra %}
 <style>
+    .review-card {
+        background-color: #1f1f1f;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 30px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
     .review-pic img {
         width: 100%;
-        max-width: 300px;
+        max-width: 100%;
         height: 200px;
-        object-fit: contain;
-        background-color: transparent; /* opcional, fondo detrás de imagen */
-        border-radius: 8px;
+        object-fit: cover;
+        border-radius: 10px;
     }
-    </style>
+
+    .review-content {
+        padding-left: 20px;
+    }
+
+    .review-title {
+        font-size: 1.5rem;
+        color: #00ffaa;
+    }
+
+    .review-meta {
+        color: #ccc;
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+    }
+
+    .rating-stars {
+        font-size: 1.2rem;
+        color: gold;
+        margin-bottom: 10px;
+    }
+
+    .site-pagination a {
+        margin: 0 5px;
+    }
+
+    .filter-buttons a.active {
+        background-color: #00ffaa;
+        color: #000;
+        border: none;
+    }
+
+    .filter-buttons .btn {
+        margin: 2px;
+    }
+    .read-more {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-weight: bold;
+        color: #fff;
+        background-color: #cc5201a2;
+        padding: 6px 12px;
+        border-radius: 25px;
+        transition: background-color 0.2s ease;
+        font-size: 0.9rem;
+    }
+
+    .read-more.selected {
+      background: #d94f00;
+      color: #521275f0;
+      font-weight: bold;
+      transition: background-color 0.2s ease;
+    }
+
+    .read-more:hover {
+        background-color: #d94f00;
+        color: #5212759f;
+        text-decoration: none;
+    }
+    .read-more.read-more.selected:hover {
+        background-color: #d94f00;
+        color: #5212759f;
+        text-decoration: none;
+    }   
+</style>
 {% endblock %}
 
 {% block content %}
-
 	<!-- Page top section -->
 	<section class="page-top-section set-bg" data-setbg="{% static 'AppGames/img/page-top-bg/3.jpg' %}">
 		<div class="page-info">
@@ -34,37 +105,33 @@ Reviews | Good Game
 
 
 	<!-- Review section -->
-	<section class="review-section">
-		<div class="container">
-	        <!-- Filtros por estrellas -->
-            <div class="text-white mb-4">
-                <strong>Filtrar por estrellas:</strong>
+    <section class="review-section py-5">
+        <div class="container">
+            <!-- Filtros por estrellas -->
+            <div class="filter-buttons text-white mb-4">
+                <strong>Filtrar por estrellas:</strong><br>
                 {% for i in "54321" %}
-                    <a href="?estrellas={{ i }}" class="btn btn-outline-light btn-sm {% if filtro_estrellas == i %}active{% endif %}">{{ i }}★</a>
+                    <a href="?estrellas={{ i }}" class="read-more {% if filtro_estrellas == i %}selected{% endif %}">{{ i }}★</a>
                 {% endfor %}
-                <a href="{% url 'reviews' %}" class="btn btn-outline-light btn-sm {% if not filtro_estrellas %}active{% endif %}">Todas</a>
+                <a href="{% url 'reviews' %}" class="read-more {% if not filtro_estrellas %}selected{% endif %}">Todas</a>
             </div>
-    
+
             {% for valoracion in page_obj %}
-            <div class="review-item mb-5">
-                <div class="row">
-                    <div class="col-lg-4">
+            <div class="review-card">
+                <div class="row align-items-center">
+                    <div class="col-md-4 mb-3 mb-md-0">
                         <div class="review-pic">
-                            <!--<img src="{% static 'AppGames/img/review/placeholder.jpg' %}" alt="">-->
-                            {% if valoracion.juego.imagen %}
-                            <img src="{{ valoracion.juego.imagen.url }}" alt="">
-                            {% else %}
-                            <img src="{% static 'AppGames/img/default.jpg' %}" alt="">
-                            {% endif %}
+                            <img src="{{ valoracion.juego.get_imagen_url }}" alt="{{ valoracion.juego.nombre }}">
                         </div>
                     </div>
-                    <div class="col-lg-8">
-                        <div class="review-content text-box text-white">
-                            <div class="rating">
-                                <h5><i>Rating</i> <span>{{ valoracion.estrellas }}</span> / 5</h5>
+                    <div class="col-md-8">
+                        <div class="review-content text-white">
+                            <h4 class="review-title">{{ valoracion.juego.nombre }}</h4>
+                            <div class="rating-stars">★ {{ valoracion.estrellas }} / 5</div>
+                            <div class="review-meta">
+                                {{ valoracion.fecha|date:"d.m.Y" }} | por <strong>{{ valoracion.user_name }}</strong>
                             </div>
-                            <div class="top-meta">{{ valoracion.fecha|date:"d.m.Y" }} / en <a href="#">{{ valoracion.juego.nombre }}</a> / por {{ valoracion.user_name}}</div>
-                            <p>{{ valoracion.comentarios|truncatewords:50 }}</p>
+                            <p>{{ valoracion.comentarios|linebreaksbr|truncatewords:50 }}</p>
                         </div>
                     </div>
                 </div>
@@ -74,7 +141,7 @@ Reviews | Good Game
             {% endfor %}
             
             <!-- Pagination -->
-            <div class="site-pagination">
+            <div class="site-pagination justify-content-center">
                 {% if page_obj.has_previous %}
                     <a href="?page={{ page_obj.previous_page_number }}{% if filtro_estrellas %}&estrellas={{ filtro_estrellas }}{% endif %}">&laquo;</a>
                 {% endif %}

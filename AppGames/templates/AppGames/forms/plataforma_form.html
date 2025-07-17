@@ -5,24 +5,11 @@
 
 {% block head_extra %}
 <style>
-    .form-group label {
-        color: #444; 
-        font-weight: 500; 
+    .contact-form label {
+        text-transform: uppercase;
+        font-weight: bold;
     }
-
-    .form-control {
-        background-color: #222;
-        color: #fff;
-        border: 1px solid #444;
-    }
-
-    .form-control:focus {
-        background-color: #222;
-        color: #fff;
-        border-color: #666;
-        box-shadow: none;
-    }
-</style>
+</style> 
 {% endblock %}
 
 {% block content %}
@@ -40,30 +27,23 @@
 	</section>
 	<!-- Page top end-->
 
-    <div class="container mt-5">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-    
-            <!-- Nombre -->
-            <div class="form-group">
-                {{ form.nombre.label_tag }}
-                {{ form.nombre }}
-                {{ form.nombre.errors }}
-            </div>
-    
-            <!-- descripcion -->
-            <div class="form-group mt-3">
-                {{ form.descripcion.label_tag }}
-                {{ form.descripcion }}
-                {{ form.descripcion.errors }}
-            </div>
-    
-            <div class="mt-5">
-                <div class="text-box">
-                    <button class="site-btn mt-4">Guardar <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></button>
-                    <a class="site-btn mt-4" href="{% url 'listPlatforms' %}">Cancelar <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></a>
+    <section class="contact-page">
+		<div class="container">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="contact-form text-white">
+                    {{ form.as_p }}
                 </div>
-            </div>     
-        </form>
-    </div>
+
+                <div class="mt-5">
+                    <div class="text-box">
+                        <button class="site-btn mt-4">Guardar <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></button>
+                        <a class="site-btn mt-4" href="{% url 'listPlatforms' %}">Cancelar <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></a>
+                    </div>
+                </div>     
+            </form>
+        </div>
+    </section>
+
 {% endblock %}

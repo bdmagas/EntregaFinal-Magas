@@ -111,25 +111,20 @@
                                         <td>{{ plataforma.nombre }}</td>
                                         <td>{{ plataforma.descripcion }}</td>
                                         <td>
-                                            <!-- <a href="{% url 'detailPlatform' plataforma.id %}" class="site-btn site-btn-sm site-btn-info">Ver</a> -->
                                             <a href="{% url 'editPlatform' plataforma.id %}" class="site-btn site-btn-sm site-btn-warning">Editar</a>
                                             <a href="{% url 'deletePlatform' plataforma.id %}"  class="site-btn site-btn-sm site-btn-danger">Borrar</a>
                                         </td>
                                     </tr>
                                 {% endfor %}
-                            </tbody>
-							<tfoot>
-								<tr>
-									<td colspan="2"></td> 
-									<td class="text-end">
-										<a href="{% url 'addPlatform' %}" class="site-btn">
-											Crear <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#" />
-										</a>
-									</td>
-								</tr>
-							</tfoot>							
+                            </tbody>						
                         </table>
                     </div>
+
+					<div class="text-box">
+						<a href="{% url 'addPlatform' %}" class="site-btn">
+							Crear <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#" />
+						</a>
+					</div>
                 {% else %}
                     <div class="alert alert-warning text-center mt-3">
                         No se encontraron plataformas.

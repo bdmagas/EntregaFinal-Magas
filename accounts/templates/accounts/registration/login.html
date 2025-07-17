@@ -5,23 +5,17 @@
 
 {% block head_extra %}
 <style>
-    .form-group label {
-        color: #444;
-        font-weight: 500; 
+    .contact-form label {
+        text-transform: uppercase;
+        font-weight: bold;
     }
-
-    .form-control {
-        background-color: #222;
-        color: #fff;
-        border: 1px solid #444;
-    }
-
-    .form-control:focus {
-        background-color: #222;
-        color: #fff;
-        border-color: #666;
-        box-shadow: none;
-    }
+    .errorlist {
+        color: red;
+        font-weight: bold;
+        list-style: none;
+        padding-left: 0;
+        margin-top: 0.5rem;
+    }      
 </style>
 {% endblock %}
 
@@ -39,28 +33,29 @@
     </section>
     <!-- Page top end -->
 
-    <div class="container mt-5 text-white">
-        <form method="post">
-            {% csrf_token %}
-            
-            {% if form.errors %}
-                <div class="alert alert-danger">Usuario o contraseña incorrectos</div>
-            {% endif %}
+    <section class="contact-page">
+		<div class="container text-white">
+            <form method="post">
+                {% csrf_token %}
+                
+                {% if form.errors %}
+                    <div class="alert alert-danger">Usuario o contraseña incorrectos</div>
+                {% endif %}
 
-            <div class="form-group">
-                {{ form.username.label_tag }}
-                {{ form.username }}
-                {{ form.username.errors }}
-            </div>
+                <div class="contact-form">
+                    {{ form.username.label_tag }}
+                    {{ form.username }}
+                    {{ form.username.errors }}
+                </div>
 
-            <div class="form-group mt-3">
-                {{ form.password.label_tag }}
-                {{ form.password }}
-                {{ form.password.errors }}
-            </div>
+                <div class="contact-form mt-3">
+                    {{ form.password.label_tag }}
+                    {{ form.password }}
+                    {{ form.password.errors }}
+                </div>
 
-            <button class="site-btn mt-4">Iniciar sesión <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></button>
-        </form>
-    </div>
-
+                <button class="site-btn mt-4">Iniciar sesión <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></button>
+            </form>
+        </div>
+    </section>
 {% endblock %}

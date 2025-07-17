@@ -1,7 +1,10 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render
 from django.core.paginator import Paginator
-from django.db.models import Q
-from ..models import VideoJuego
+from django.views.generic import ListView 
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.detail import DetailView
+from django.db.models import Q, Avg
+from ..models import VideoJuego, Valoracion, Favorito
 from ..forms import VideoJuegoForm
 import string
 
@@ -22,7 +25,7 @@ def ver_videojuegos(request):
     query = request.GET.get('q', '')
 
     if query:
-        juegos = juegos.filter(Q(nombre__icontains=query)).order_by('nombre')   # buscar/search
+        juegos = juegos.filter(Q(nombre__icontains=query)).order_by('nombre')   # busqueda/search
     else:
         if letra:
             juegos = juegos.filter(nombre__istartswith=letra).order_by('nombre')  # filtrar por inicial
@@ -34,6 +37,10 @@ def ver_videojuegos(request):
     letras = list(string.ascii_uppercase)  # ['A', 'B', 'C', ...]
     tags = VideoJuego.objects.values_list('tag', flat=True).distinct()
     generos = VideoJuego.objects.values_list('genero', flat=True).distinct()
+
+    favoritos = []
+    if request.user.is_authenticated:
+        favoritos = Favorito.objects.filter(usuario=request.user).values_list('juego_id', flat=True)
 
     paginator = Paginator(juegos, 15)  # 15 por página
     page_obj = paginator.get_page(page_number)
@@ -48,52 +55,58 @@ def ver_videojuegos(request):
         "generos": generos,
         "genero_seleccionado": genero,    
         "query": query,
+        "favoritos": favoritos,
         "page_obj": page_obj,
     }
 
     return render(request, "AppGames/video_juegos.html", contexto)
 
-def nuevo_videojuego(request):
+class VideoJuegoListView(ListView):
     """
-    Agregar un nuevo juego mediante un form, de acuerdo con el modelo VideoJuego
-    input:
-     - nombre
-     - genero
-     - tag
-     - plataformas
-     - fecha de lanzamiento
-     - imagen
-    """ 
-    if request.method == 'POST':
-        form = VideoJuegoForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('games') 
-    else:
-        form = VideoJuegoForm()
-    
-    contexto = {'form': form}
-    return render(request, 'AppGames/forms/video_juegos_form.html', contexto)
+    Vista para listar todos los juegos.
+    """
+    model = VideoJuego
+    template_name = 'AppGames/forms/video_juego_list.html'
+    paginate_by = 15                
+    ordering = ['nombre',] 
 
-# def nuevo_videojuego(request):
-#     """
-#     Agregar un nuevo juego mediante un form, de acuerdo con el modelo VideoJuego
-#     input:
-#      - nombre
-#      - genero
-#      - tag
-#      - plataformas
-#      - fecha de lanzamiento
-#      - imagen
-#     """ 
-#     if request.method == 'POST':
-#         form = VideoJuegoForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('games') 
-#     else:
-#         form = VideoJuegoForm()
-    
-#     contexto = {'form': form}
-#     return render(request, 'AppGames/forms/video_juegos_form.html', contexto)
+class VideoJuegoDetailView(DetailView):
+    """
+    Vista para mostrar los detalles de un juego específico.
+    """
+    model = VideoJuego
+    template_name = 'AppGames/forms/video_juego_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        promedio = Valoracion.objects.filter(juego=self.object).aggregate(prom=Avg('estrellas'))['prom']
+        context['promedio_rating'] = promedio or 0
+        return context
+    
+class VideoJuegoCreateView(CreateView):
+    """
+    Vista para crear un nuevo juego.
+    """
+    model = VideoJuego
+    form_class = VideoJuegoForm
+    template_name = 'AppGames/forms/video_juegos_form.html'   # form p/crear o editar juegos
+    success_url = '/games/listGames'  # Redirige a la lista de games después de crear uno nuevo
+    
+
+class VideoJuegoUpdateView(UpdateView):
+    """
+    Vista para actualizar un juego existente.
+    """
+    model = VideoJuego
+    form_class = VideoJuegoForm
+    template_name = 'AppGames/forms/video_juegos_form.html'   # form p/crear o editar juegos
+    success_url = '/games/listGames'      # Redirige a la lista de games después de crear uno nuevo
+
+
+class VideoJuegoDeleteView(DeleteView):
+    """
+    Vista para eliminar un juego existente.
+    """
+    model = VideoJuego
+    template_name = 'AppGames/forms/video_juego_delete.html'     # form p/borrar juegos
+    success_url = '/games/listGames'      # Redirige a la lista de games después de crear uno nuevo

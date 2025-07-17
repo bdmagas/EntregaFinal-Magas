@@ -5,23 +5,12 @@
 
 {% block head_extra %}
 <style>
-    .form-group label {
-        color: #444;
-        font-weight: 500; 
-    }
-
-    .form-control {
-        background-color: #222;
+    .contact-form label {
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-bottom: 5px;
         color: #fff;
-        border: 1px solid #444;
-    }
-
-    .form-control:focus {
-        background-color: #222;
-        color: #fff;
-        border-color: #666;
-        box-shadow: none;
-    }
+    }  
 </style>
 {% endblock %}
 
@@ -40,37 +29,53 @@
     </section>
     <!-- Page top end -->
 
-    <div class="container mt-5">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
+    <section class="contact-page">
+		<div class="container">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
 
-            {% if form_user.errors %}
-                <div class="alert alert-danger">
-                    {{ form_user.errors }}
+                {% if form_user.errors %}
+                    <div class="alert alert-danger">
+                        {{ form_user.errors }}
+                    </div>
+                {% endif %}
+
+                {% if form_profile.errors %}
+                    <div class="alert alert-danger">
+                        {{ form_profile.errors }}
+                    </div>
+                {% endif %}
+
+                <div class="contact-form text-white">
+                    {{ form_user.as_p }}
                 </div>
-            {% endif %}
 
-            {% if form_profile.errors %}
-                <div class="alert alert-danger">
-                    {{ form_profile.errors }}
-                </div>
-            {% endif %}
+                <div class="contact-form text-white">
+                    <p>{{ form_profile.fecha_nacimiento.label_tag }} {{ form_profile.fecha_nacimiento }}</p>
 
-            <div class="form-group">
-                {{ form_user.as_p }}
-            </div>
-
-            <div class="form-group mt-3">
-                {{ form_profile.as_p }}
-            </div>
-
-            <div class="mt-5">
-                <div class="text-box">
-                    <button class="site-btn mt-4">Guardar cambios <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></button>
-                    <a class="site-btn mt-4" href="{% url 'perfil' %}">Cancelar <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></a>
-                </div>
-            </div>            
-        </form>
-    </div>
-
+                    <div class="mb-3 text-white">
+                        {{ form_profile.avatar.label_tag }}
+                    </div>
+                    </label>                    
+                    {% if form_profile.instance.avatar %}
+                        <div class="actual-img mb-2 mt-2">
+                            <img src="{{ form_profile.instance.get_avatar_url }}"
+                                alt="avatar actual"
+                                style="max-height: 150px; border: 1px solid #555; border-radius: 8px; margin-bottom: 15px;">
+                        </div>
+                    {% endif %}
+                </div>                     
+                <div class="mb-3 text-white">                
+                    {{ form_profile.avatar }}
+                </div>                  
+                
+                <div class="mt-5">
+                    <div class="text-box">
+                        <button class="site-btn mt-4">Guardar cambios <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></button>
+                        <a class="site-btn mt-4" href="{% url 'perfil' %}">Cancelar <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></a>
+                    </div>
+                </div>            
+            </form>
+        </div>
+    </section>
 {% endblock %}
