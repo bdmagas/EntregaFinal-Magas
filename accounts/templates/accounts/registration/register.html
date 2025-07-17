@@ -38,66 +38,58 @@
             <h2>Crear una cuenta</h2>
             <form method="post">
                 {% csrf_token %}
-                
-                <!-- Mostramos errores generales del formulario -->
-                {% if form.non_field_errors %}
+ 
+                {% if form.errors %}
                     <div class="alert alert-danger">
-                        {{ form.non_field_errors }}
+                        {% if form.non_field_errors %}
+                            {% for error in form.non_field_errors %}
+                                <div><strong>Error:</strong> {{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <div><strong>{{ field.label }}:</strong> {{ error }}</div>
+                            {% endfor %}
+                        {% endfor %}
                     </div>
                 {% endif %}
-        
+
                 <!-- Campo username -->
                 <div class="contact-form mt-3">
                     {{ form.username.label_tag }}
                     {{ form.username }}
-                    {{ form.username.errors }}
                 </div>
     
                 <!-- Campo nombre -->
                 <div class="contact-form">
                     {{ form.first_name.label_tag }}
                     {{ form.first_name }}
-                    {{ form.first_name.errors }}
                 </div>
 
                 <!-- Campo apellido -->
                 <div class="contact-form">
                     {{ form.last_name.label_tag }}
                     {{ form.last_name }}
-                    {{ form.last_name.errors }}
                 </div>
 
                 <!-- Campo email -->
                 <div class="contact-form">
                     {{ form.email.label_tag }}
                     {{ form.email }}
-                    {{ form.email.errors }}
                 </div>
 
                 <!-- Campo password1 -->
                 <div class="contact-form">
                     {{ form.password1.label_tag }}
                     {{ form.password1 }}
-                    {{ form.password1.errors }}
                 </div>
         
                 <!-- Campo password2 -->
                 <div class="contact-form">
                     {{ form.password2.label_tag }}
                     {{ form.password2 }}
-                    {{ form.password2.errors }}
                 </div>
-
-                {% if form.errors %}
-                <div class="alert alert-danger">
-                    {{ form.non_field_errors }}
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                            <div><strong>{{ field.label }}:</strong> {{ error }}</div>
-                        {% endfor %}
-                    {% endfor %}
-                </div>
-                {% endif %}
 
                 <button class="site-btn mt-3">Registrar <img src="{% static 'AppGames/img/icons/double-arrow.png' %}" alt="#"/></button>
             </form>
